@@ -19,6 +19,7 @@ class SignInController extends GetxController {
       final googleAuth = await googleUser?.authentication;
       final cred = GoogleAuthProvider.credential(
           idToken: googleAuth?.idToken, accessToken: googleAuth?.accessToken);
+      return await auth.signInWithCredential(cred);
     } catch (e) {
       log(e.toString());
     }
