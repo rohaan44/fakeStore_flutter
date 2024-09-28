@@ -146,13 +146,17 @@ class SigninScreen extends StatelessWidget {
                       RoundedButton(
                         height: Get.height * .05,
                         width: Get.width * .05,
-                        onPress: () {},
+                        onPress: () async {
+                          await controller.signInWithFacebook();
+                        },
                         imagesPaths: ImagePaths.facebookIcon,
                       ),
                       RoundedButton(
                         height: Get.height * .035,
                         width: Get.width * .035,
-                        onPress: () {},
+                        onPress: () async {
+                          await controller.loginWithGoogle();
+                        },
                         imagesPaths: ImagePaths.googleIcon,
                       ),
                     ],
