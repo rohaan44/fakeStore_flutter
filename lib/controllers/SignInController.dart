@@ -62,17 +62,64 @@ class SignInController extends GetxController {
     }
   }
 
+  Future<void> signInWithFacebook() async {
+    try {
+      // Step 1: Trigger the Facebook sign-in flow
+      final LoginResult loginResult = await FacebookAuth.instance.login();
 
- Future<UserCredential> signInWithFacebook() async {
-  // Trigger the sign-in flow
-  final LoginResult loginResult = await FacebookAuth.instance.login();
+      if (loginResult.status == LoginStatus.success) {
+        // Step 2: Create a credential from the access token
+        final OAuthCredential facebookAuthCredential =
+            FacebookAuthProvider.credential(
+                loginResult.accessToken!.tokenString);
 
-  // Create a credential from the access token
-  final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
+        // Step 3: Sign in to Firebase with the Facebook credential
+        final UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithCredential(facebookAuthCredential);
 
-  // Once signed in, return the UserCredential
-  return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-}
+        final User? user = userCredential.user;
+
+        if (user != null) {
+          // Step 4: Check if the user data already exists in Firestore
+          final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.email)
+              .get();
+
+          if (userDoc.exists) {
+            // User data exists, just log in and navigate
+            log('User already exists. Signing in...');
+            Get.snackbar("Facebook Sign In", "User Login Successfully");
+            Get.offAll(() => const MainScreen());
+          } else {
+            // User data doesn't exist, save it to Firestore
+            final userData = {
+              'uid': user.uid,
+              'fullName': user.displayName ?? 'No Name',
+              'email': user.email,
+              'photoURL': user.photoURL,
+              'lastSignIn': DateTime.now(),
+            };
+
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.uid)
+                .set(userData);
+
+            log('New user data saved to Firestore.');
+            Get.snackbar("Facebook Sign In", "User Login Successfully");
+            Get.offAll(() => const MainScreen());
+          }
+        }
+      } else if (loginResult.status == LoginStatus.cancelled) {
+        log('Facebook sign-in cancelled by the user.');
+      } else {
+        log('Facebook sign-in failed: ${loginResult.message}');
+      }
+    } catch (e) {
+      log('Error during Facebook sign-in: $e');
+    }
+  }
 
   void login() {
     if (formKey.currentState!.validate()) {
@@ -88,6 +135,4 @@ class SignInController extends GetxController {
       });
     }
   }
-
-
 }
