@@ -5,17 +5,21 @@ import 'package:project/Colors/Colors.dart';
 
 class RoundedButton extends StatelessWidget {
   final VoidCallback onPress;
-  final String imagesPaths;
+  final Icon? icon;
+  final String? imagesPaths;
   final double height; // Add dynamic height
   final double width;
+  final bool isSvg;
 
-  const RoundedButton({
-    Key? key,
-    required this.height,
-    required this.width,
-    required this.onPress,
-    required this.imagesPaths,
-  }) : super(key: key);
+  const RoundedButton(
+      {Key? key,
+      required this.height,
+      required this.width,
+      required this.onPress,
+      this.imagesPaths,
+      this.icon,
+      this.isSvg = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +41,22 @@ class RoundedButton extends StatelessWidget {
               border: Border.all(color: ColorsCustom.greyBorder),
             ),
             child: Center(
-              child: SvgPicture.asset(
-                imagesPaths,
-                height: height,
-                width: width,
-                // fit: BoxFit.contain, // Ensure the image fits within the space
-              ),
+              child: imagesPaths != null
+                  ? (isSvg
+                      ? SvgPicture.asset(
+                          imagesPaths!,
+                          height: height,
+                          width: width,
+                          fit: BoxFit.contain,
+                        )
+                      : Image.asset(
+                          imagesPaths!,
+                          height: height,
+                          width: width,
+                          fit: BoxFit.contain,
+                        ))
+                  : icon, // Fallback icon if no image is provided
+              // Set the icon size based on height
             ),
           ),
         ),

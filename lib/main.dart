@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:project/views/MainScreen.dart';
 // import 'package:project/views/SignInScreen.dart';
-import 'package:project/views/auth/SignUpScreen.dart';
+// import 'package:project/views/auth/SignUpScreen.dart';
 // import 'package:project/views/onboardingScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
+// import 'package:project/views/homeScreen.dart';
 import 'firebase_options.dart';
 // import 'package:project/views/welcomeScreen.dart'
 
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: SignUpScreen(),
+      home: MainScreen(),
     );
   }
 }

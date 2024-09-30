@@ -4,5 +4,5 @@ class ImagePaths {
   static const String googleIcon = 'assets/Images/googleIcon.svg';
   static const String appleIcon = 'assets/Images/apple-logo.svg';
   static const String facebookIcon = 'assets/Images/Facebook-Logo.svg';
-  
+    static const String homScreen = 'assets/Images/homeScreen.svg';
 }

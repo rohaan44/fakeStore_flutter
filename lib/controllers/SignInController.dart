@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:project/views/MainScreen.dart';
+import 'package:project/views/homeScreen.dart';
 
 class SignInController extends GetxController {
   final TextEditingController emailController = TextEditingController();
@@ -54,7 +54,7 @@ class SignInController extends GetxController {
 
           // Step 4: Navigate to the main screen after sign-in
           Get.snackbar("Google Sign In", "User Login Successfully");
-          Get.offAll(() => const MainScreen());
+          Get.offAll(() => const HomeScreen());
         }
       }
     } catch (e) {
@@ -90,7 +90,7 @@ class SignInController extends GetxController {
             // User data exists, just log in and navigate
             log('User already exists. Signing in...');
             Get.snackbar("Facebook Sign In", "User Login Successfully");
-            Get.offAll(() => const MainScreen());
+            Get.offAll(() => const HomeScreen());
           } else {
             // User data doesn't exist, save it to Firestore
             final userData = {
@@ -108,7 +108,7 @@ class SignInController extends GetxController {
 
             log('New user data saved to Firestore.');
             Get.snackbar("Facebook Sign In", "User Login Successfully");
-            Get.offAll(() => const MainScreen());
+            Get.offAll(() => const HomeScreen());
           }
         }
       } else if (loginResult.status == LoginStatus.cancelled) {
@@ -131,7 +131,7 @@ class SignInController extends GetxController {
           .then((value) {
         isLoading.value = false;
         Get.snackbar("Congratulation", "User Login Successfully");
-        Get.off(() => MainScreen());
+        Get.off(() => HomeScreen());
       });
     }
   }
